@@ -1,0 +1,2951 @@
+<html>
+<head>
+
+<title>Baseball Simulator</title>
+
+<style type='text/css' >
+
+body { 
+	margin:0; 
+	margin-top:40px; 
+	font-family:arial;
+}
+body * { 
+	text-shadow:1px 1px 1px white !important; 
+}
+.hidden { 
+	display:none; 
+}
+
+#choose { 
+	display:block;
+	margin:0px; 
+	margin-top:10px; 
+	padding:20px; 
+	background:#fafafa; 
+	border:1px solid #eee; 
+}
+#start { 
+	display:none; 
+}
+
+select { 
+	-moz-appearance: none; 
+	-moz-border-radius: 0.5em 0.5em 0.5em 0.5em; 
+	-moz-box-shadow: 1px 1px 1px #FFFFFF; 
+	-webkit-appearance: button;    
+	-webkit-border-radius: 0.5em 0.5em 0.5em 0.5em; 
+	-webkit-box-shadow: 1px 1px 1px #FFFFFF; 
+	-webkit-user-select: none; background-image: 
+	-moz-linear-gradient(top, #f4f4f4 0%, #f9f9f9 100%); 
+	background-image: url('http://mlb.mlb.com/shared/images/icons/downarrow.png'),  -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4f4f4), color-stop(100%,#f9f9f9)); 
+	background-image: url('http://mlb.mlb.com/shared/images/icons/downarrow.png'), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);  
+	background-image: -o-linear-gradient(top, #f4f4f4 0%,#f9f9f9 100%); 
+	background-image: -ms-linear-gradient(top, #f4f4f4 0%,#f9f9f9 100%); 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4f4f4', endColorstr='#f9f9f9',GradientType=0 ); 
+	background-image: linear-gradient(top, #f4f4f4 0%,#f9f9f9 100%);
+	background-position: 97% 50%;
+	background-repeat: no-repeat;
+	border-radius: 0.5em;
+	border: 1px solid #D3D3D3;
+	font-size: 12px;
+	padding: 4px 15px 4px 4px; margin:0px;
+}
+.fifty { 
+	display:inline-block; 
+	min-width:33%; 
+	max-width:45%; 
+}
+
+.setup-ctrls button { 
+	width:150px; 
+	float:right;
+	margin-top:25px; 
+}
+
+#scores { 
+	font-size:30pt; 
+	font-family:cambria; 
+	position:fixed; 
+	left:10px; 
+	top: 60px; 
+}
+#boxscore { 
+	width:350px; 
+	right:10px; 
+	position:fixed; 
+	top:60px; 
+	border:1px solid #ccc; 
+	padding:10px; 
+}
+#boxscore td.cur, td.runs { 
+	background:#eee; 
+}
+#boxscore td { 
+	text-align:center; 
+	padding:5px;
+}
+#inning { 
+	font-size:20pt; 
+	font-family:cambria; 
+	position:fixed; 
+	left:500px; 
+	top: 60px; 
+	color:grey;  
+}
+#runners { 
+	-webkit-transform:rotate(-45deg); 
+	position:fixed; left:525px; 
+	top:120px; 
+	border:1px solid black;
+}
+
+#runners table { 
+	border-spacing:3px; 
+}
+#runners td { 
+	width:40px; 
+	height:40px;
+	margin:10px; 
+	border:1px solid #ddd; 
+}
+#runners .home { }
+#runners .full { 
+	background:gold; 
+}
+#runners .empty { 
+	border:1px solid #ddd;  
+	background:#eee;
+}
+
+#pcard, #bcard { 
+	background:#eee; 
+	width:350px; 
+	height:60px; 
+	padding:10px; 
+	left:10px; 
+	position:fixed;
+}
+
+#bcard { 
+	top:200px; 
+	border-top:1px solid gray;
+}
+#pcard { 
+	top:120px; 
+}
+
+.gray { 
+	color:gray; 
+}
+
+#match img { 
+	height:60px; 
+}
+.mug { 
+	width:60px; 
+}
+.stats {  }
+
+.pitch { 
+	text-shadow:0px 0px black !important; 
+	font-size:20px; 
+	display:inline-block; 
+	width:25px; 
+	height:25px; 
+	margin-left:5px;
+	 margin-right:25px; 
+	 border-radius:50%; 
+	 color:white; 
+	 text-align:center; 
+	 font-family:helvetica; 
+}
+.pitch.strike { 
+	background: red;
+}
+.pitch.ball { 
+	background:green; 
+}
+.pitch.play { 
+	background:blue; 
+}
+
+#output { 
+	position:fixed; 
+	left:10px; 
+	top:290px; 
+	height:400px; 
+	font-size:12px; 
+	width:350px; 
+	box-shadow:3px 3px 3px #eee; 
+	padding:10px;overflow:scroll;
+}
+#output div.out { 
+	padding:10px; 
+}
+
+#output div.count { 
+	display:inline-block; 
+	widtH:50px; 
+	font-weight:bold;
+}
+#output div.info { 
+	display:inline-block; 
+	width:200px; 
+}
+#output div.strong { 
+	font-weight:bold; 
+	font-size:14px; 
+}
+
+#output div.score { 
+	background:#eee; 
+}
+#output div.play { 
+	font-weight:bold; 
+}
+
+#modeselect { 
+	position:fixed; 
+	background:black; 
+	left:0; 
+	top:0; 
+	width:100%; 
+	color:white; 
+	height:40px; 
+}
+#modeselect div { 
+	float:left; 
+	color:#888; 
+	margin-right:30px;
+	padding:10px; 
+}
+#modeselect div.active { 
+	color:white; 
+	text-shadow:1px 1px 1px black; 
+}
+
+#playerfind { 
+	position:fixed; 
+	background:#eee; 
+	left:0;
+	top:40; 
+	height:25px; 
+	color:white; 
+	width:100%; 
+	color:black; 
+	padding:20px; 
+	box-shadow:2px 2px 2px #ccc;  
+}
+#chooserow3 { 
+	margin-top:105px; 
+}
+#currentroster { 
+	width:45%; 
+	float:left; 
+	padding:20px; 
+}
+#rosterresults { 
+	width:45%; 
+	float:left; 
+	padding:20px; 
+	border-right:2px dashed #ccc; 
+	max-height:530px; 
+	overflow-y:scroll; 
+	box-shadow:0px -2px 2px #ccc inset;
+}
+
+input[type=text] { 
+	padding:12px; 
+	padding-top:10px; 
+	padding-bottom:10px; 
+	border:1px solid #ddd;
+	box-shadow:1px 1px 1px #eee inset; 
+	font-size:14pt;  
+}
+input[type=text]:hover { 
+	border:1px solid #ccc; 
+}
+input[type=text]:focus { 
+	border:1px solid #28f; 
+	outline:0px solid black; 
+	outline-offset:0; 
+}
+
+button { 
+	-webkit-transition:all .2s ease; 
+	padding:12px; 
+	padding-top:10px; 
+	background:#f0f0f0; 
+	padding-bottom:10px; 
+	border:1px solid #ddd; 
+	box-shadow:1px 1px 1px #eee; 
+	font-size:12pt;  
+}
+button:hover { 
+	cursor:pointer; 
+	background:white;
+	 box-shadow:none;
+}
+button:active { 
+	box-shadow:2px 2px 2px #eee inset; 
+}
+
+#srchtype a.on { 
+	color:black; 
+	cursor:arrow; 
+	text-decoration:none; 
+}
+#srchtype tr { 
+	cursor:drag; 
+}
+table { 
+	width:100%; 
+	border-spacing:0px;
+}
+#currentroster table tr:hover { 
+	background:#eee; 
+	cursor:pointer;
+}
+#currentroster table tr:first-child:hover { 
+	background:white; 
+}
+tr.current td { 
+	background: #ccc; 
+}
+td, th { 
+	text-align:left; 
+}
+td.drag { 
+	cursor:move; 
+}
+tr.on, tr.on:hover { 
+	background:#ccc; 
+}
+
+
+#currentroster { 
+	position:fixed; 
+	right:0; 
+	width:350px; 
+	top:180px;
+}
+
+#currentroster table tr { 
+	border-bottom:2px dashed blue; 
+	border-radius:3px; 
+	margin:3px; 
+}
+#currentroster table tr:first-child { 
+	border:0px solid black; 
+}
+
+#rostera-select, #rosterb-select { 
+	cursor:pointer; 
+	float:left; 
+	background:#eee; 
+	padding:0px;
+	border:1px solid #eee; 
+}
+#rostera-select input, #rosterb-select input { 
+	cursor:pointer; 
+	box-shadow:none; 
+	padding:7px; 
+	font-size:12px; 
+	border:0px solid black; 
+	background:transparent; 
+}
+#rostera-select.on:hover input, #rosterb-select.on:hover input { 
+	border:0px solid #aaa; 
+	background:white; 
+	cursor:text; 
+}
+
+#rostera:not(.on), #rosterb:not(.on) { 
+	display:none; 
+}
+#rostera-select.on, #rosterb-select.on { 
+	background:white; 
+	border:1px solid #ccc; 
+}
+
+#l { 
+	background:blue; 
+	box-shadow:-2px -2px 2px black inset; 
+	color:white !important; 
+	text-shadow:0 !important; 
+}
+#ltext { 
+	display:block; 
+	margin-top:0px;
+}
+
+#follow { 
+	position:fixed; 
+	left:0; 
+	top:0; 
+	display:none; 
+	z-index:1000; 
+	padding:5px; 
+	background:blue; 
+	color:white; 
+	border-radius:3px; 
+}
+
+iframe#playerPanel {
+	display:none;
+	-webkit-font-smoothing: antialiased;
+	-webkit-user-select: none;
+	background-color: rgb(255, 255, 255);
+	border-bottom-color: rgb(65, 65, 65);
+	border-bottom-style: none;
+	border-bottom-width: 0px;
+	border-left-color: rgb(65, 65, 65);
+	border-left-style: none;
+	border-left-width: 0px;
+	border-right-color: rgb(65, 65, 65);
+	border-right-style: none;
+	border-right-width: 0px;
+	border-top-color: rgb(65, 65, 65);
+	border-top-style: none;
+	border-top-width: 0px;
+	box-sizing: border-box;
+	color: rgb(65, 65, 65);
+	cursor: auto;
+	display: block;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 13px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	height: 598px;
+	left: 0px;
+	line-height: normal;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	opacity: 1;
+	outline-color: rgb(65, 65, 65);
+	outline-style: none;
+	outline-width: 0px;
+	overflow-x: visible;
+	overflow-y: visible;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+	position: absolute;
+	text-align: left;
+	top: 0px;
+	vertical-align: baseline;
+	visibility: visible;
+	white-space: normal;
+	width: 320px;
+	word-spacing: 0px;
+	z-index: 1;
+	
+}
+
+</style>
+
+<script type="text/javascript" src="jquery.js" ></script>
+
+<script>
+
+var TeamStatsLoader = (function() {
+
+	var _ = {};
+	
+	_.stats = {};
+	
+	loadWait = [];
+	
+	_.load = function ( team_id, type, cb ) {
+	
+		cb = cb || function(){};
+		loadWait.push( {team: team_id, type: type, loaded: false, callback:cb} );
+		
+		var sortBy = (type=="hitting")
+			?	'ab'
+			:	"ip";
+		var ud = type=="hitting"
+			?	'desc'
+			:	sortBy=="era"
+				?	'asc'
+				:	"desc";
+				
+		var player_pool = "QUALIFIER";
+	
+		var team = "";
+		if ( team_id ) { 
+			team = "&team_id=" + team_id;
+			player_pool = "ALL";
+		}
+
+		var url = "http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?season=2016&sort_order='" 
+			+ ud + "'" + team + "&sort_column='" + sortBy + "'&stat_type=" + type
+			+ "&page_type=SortablePlayer&game_type='R'&player_pool=" + player_pool
+			+ "&season_type=ANY&sport_code='mlb'&results=1000&recSP=1&recPP=50";
+
+		var callback= function (d, s) {
+			
+			try {
+				d = JSON.parse(d).stats_sortable_player.queryResults.row;
+			} catch (e) {
+				console.log ("Unable to parse result " + d + " for input " + s.team + " - " + s.type);
+				return false;
+			}
+			if ( s.team == "" ) {
+				if ( s.type == "hitting" ) {
+					_.stats.hitting = d;
+				} else {
+					_.stats.pitching = d;
+				}
+			} else {
+				_.stats[s.team] = _.stats[s.team] || {
+					hitting:false,
+					pitching:false
+				}
+				if ( s.type == "hitting" ) {
+					_.stats[s.team].hitting = d;
+				} else {
+					_.stats[s.team].pitching = d;
+				}
+			
+			}
+			
+			loadWait.splice( loadWait.indexOf(s), 1 );
+			
+			if ( s.callback ) {
+				_.loaded(s.callback);
+			}
+
+		}
+
+		_.ajax(url, callback, loadWait[loadWait.length-1]);
+		
+		return _;
+
+	}
+	
+	_.loaded = function( fn ) {
+		
+		if ( loadWait.length ) {
+			return;
+		}
+		
+		fn(_.stats);
+	
+	}
+	
+	
+	
+	
+	_.ajax = function ( url, callback, variable, method, async, fn ) {
+
+		if ( !url ) return;
+		callback = callback || function(){};
+		method = method || "GET";
+		async = (async !== undefined)
+			? async
+			: true;
+
+		var _ = (window.XMLHttpRequest)
+			? new XMLHttpRequest()
+			: new ActiveXObject("Microsoft.XMLHTTP");
+							
+		_.onreadystatechange = function() {
+			
+			if (_.readyState==4 && _.status==200) {
+				if ( !fn || fn(_.responseText) ) {
+					callback(_.responseText, variable);
+				}
+			}
+				
+		}
+			
+		_.open(method, url, async);
+		_.send();
+	
+	}
+
+	
+	return _;
+
+})();
+
+</script>
+
+<script>
+
+//Setup
+
+var Setup = (function(){
+
+var _ = {};
+
+var teamIds = _.teamIds = ["", ""];
+
+var teamNames = _.teamNames = ["Team A", "Team B"];
+
+_.teamPitcherIds = [0, 0];
+
+_.stats = {};
+
+var teams = [
+	{
+		hitting: [],
+		pitching: []
+	},
+	{
+		hitting: [],
+		pitching: []
+	}
+];
+
+_.lineups = [[],[]];
+
+_.loadTeam = function ( num, id ) {
+	teamIds[num] = id;
+	
+	TeamStatsLoader.load( id, "hitting", _.postLoadTeam)
+		.load( id, "pitching", _.postLoadTeam );
+	
+}
+
+_.postLoadTeam = function( s) {
+	_.stats = s;
+	
+	
+	for ( var i=0; i<teamIds.length; i++ ) {
+		if ( teamIds[i] != "" ) {
+			_.lineups[i] = _.stats[teamIds[i]].hitting.slice(0,9);
+			teamNames[i] = _.stats[teamIds[i]].hitting[0].team_name;
+			teams[i] = _.stats[teamIds[i]];
+		}
+	}
+}
+
+function updateAllSelects() {
+
+	$(".teamAName").html(teamNames[0]);
+	$(".teamBName").html(teamNames[1]);
+
+	
+	var htmlA = "", htmlB = "";
+	for ( var i=0; i<teams[0].pitching.length; i++ ) {
+		var p = teams[0].pitching[i];
+		htmlA += "<option value='" + i + "' >" + p.name_display_first_last + " (" + p.w
+			 + "-" + p.l + ", " + p.era + " ERA)" + "</option>";
+	}
+	for ( var i=0; i<teams[1].pitching.length; i++ ) {
+		var p = teams[1].pitching[i];
+		htmlB += "<option value='" + i + "' >" + p.name_display_first_last
+			+ " (" + p.w + "-" + p.l + ", " + p.era + " ERA)" + "</option>";
+	}
+	
+	$(".teamAPitcher").html(htmlA);
+	$(".teamBPitcher").html(htmlB);
+
+}
+
+function populateLineups() {
+
+	var lineups = ["", ""];
+	var lineup_len = 9;
+	
+	for ( var i=0; i<lineups.length; i++ ) {
+		
+		
+		lineups[i] += "<table>";
+		for ( var j=0; j<lineup_len; j++ ) {
+			lineups[i] += "<tr><td>" + (j+1) + "</td><td>";
+			lineups[i] += "<select onclick='Setup.choosePlayer(" + i + "," + j + "," + "this.value)' >";
+			
+			if ( teamIds[i] == "" || ! _.stats[teamIds[i]] ) {
+				continue;
+			}
+			
+			for ( var k=0; k<_.stats[teamIds[i]].hitting.length; k++ ) {
+				
+				var s = k == j
+					?	" selected='selected' "
+					:	"";
+				
+				var p = _.stats[teamIds[i]].hitting[k];
+				
+				lineups[i] += "<option value='" + k + "' " + s + ">";
+				lineups[i] += p.name_display_first_last + " " + p.pos + " (" + p.avg
+				 	+ " AVG, " + p.rbi + " RBI, " + p.hr + " HR)";
+				lineups[i] += "</option>";
+			}
+			lineups[i] += "</select>";
+			lineups[i] += "</td></tr>";		
+		
+		}
+		lineups[i] += "</table>";
+	}
+	
+	 $(".lineupA").html(lineups[0]);
+	 $(".lineupB").html(lineups[1]);
+	
+}
+
+_.choosePlayer = function( team, row, playerNum ) {
+	
+	_.lineups[team*1][row*1] = _.stats[teamIds[team]].hitting[playerNum*1];
+
+}
+
+_.transition = function( step ) {
+
+	updateAllSelects();
+	populateLineups();
+	
+	$(".mb").removeClass("active");
+	
+	switch(step) {
+	case 0:
+		$("#choose").show();
+		$("#start").hide();
+		$("#players").hide();
+		$("#currentroster").hide();
+		$("#btnModeChoose").addClass("active");
+		$("#teams").fadeIn();
+		
+		break;
+	case 1:
+		$("#choose").show();
+		$("#start").hide();
+		$("#currentroster").hide();
+		$("#btnModeChoose").addClass("active");
+		$("#teams").hide();
+		$("#players").fadeIn();
+		break;
+	case 2:
+		$("#choose").hide();
+		$("#start").fadeIn(); 
+		$("#btnModeStart").addClass("active");
+		$("#currentroster").show();
+		_.game = new Game(_).init(); 
+		break;
+	default:
+	
+		break;
+	}
+
+	return _;
+
+}
+
+_.game = null;
+
+return _;
+
+})();
+
+$("document").ready(function(){
+	Setup.transition(0);
+	
+	Setup.loadTeam(0, $("#selTeamA").val());
+	Setup.loadTeam(1, $("#selTeamB").val());
+	
+	$("#selTeamA").change(function() {
+		Setup.loadTeam(0, this.value);
+	});
+	
+	$("#selTeamB").change(function(){
+		Setup.loadTeam(1, this.value);
+	});
+	 
+	$("#selTeamAPitcher").change(function(){
+		Setup.teamPitcherIds[0] = this.value*1;
+	});
+	
+	$("#selTeamBPitcher").change(function(){
+			Setup.teamPitcherIds[1] = this.value*1;	
+	});
+});
+
+
+</script>
+
+<script>
+
+//Game play
+
+var Team = function( lineup, pitcher ) {
+
+var _ = {};
+
+window.teams = window.teams && window.teams.counter
+	?	window.teams
+	:	[];
+window.teams.push(_);
+window.teams.counter = window.teams.counter || 0;
+window.teams.getById = window.teams.getById || function( _id) {
+	for ( var i=0; i<window.teams.length; i++ ) {
+		if ( window.teams[i].id() == _id ) {
+			return window.teams[i];
+		}
+	}
+	return null;
+}
+
+lineup = lineup || [];
+
+
+var atBat = 0;
+
+_.pitcher = function(p) {
+	if ( p !== undefined ) {
+		pitcher = p;
+		return _;
+	} else {
+		return pitcher;
+	}
+}
+
+var id = window.teams.counter++;
+
+var parentElement, tabParentElement;
+
+var name = lineup[0] 
+	? 	lineup[0].info.team_abbrev 
+	: 	"Team " + (id + 1);
+
+var full_name = lineup[0]
+	?	lineup[0].info.team_name
+	:	name;
+
+_.name = function( n ) {
+	if ( n !== undefined ) {
+		name = n;
+		return _.render();
+	} else {
+		return name;
+	}
+}
+
+_.fullName = function( n ) {
+	if ( n !== undefined ) {
+		full_name = n;
+		return _.render();
+	} else {
+		return full_name;
+	}
+}
+
+_.id = function() {
+	return id;
+}
+
+_.lineup = function( l ) {
+	if ( typeof l === "number" ) {
+		return lineup[l];
+	} else if ( l !== undefined ) {
+		lineup = l;
+		return _;
+	} else {
+		return lineup;
+	}
+
+}
+
+_.totals = function( prop ) {
+	
+	
+	var props = ["ab", "r", "rbi", "h", "k", "bb", "lob", "pa"];
+	
+	if ( prop ) {
+		props = [prop];
+	}
+	
+	var totals = {};
+
+	for ( var i=0; i<props.length; i++ ) {
+		totals[props[i]] = 0;
+	}
+	
+	for ( var i=0; i<lineup.length; i++ ) {
+		for ( var j=0; j<props.length; j++ ) {
+			totals[props[j]] += lineup[i].game[props[j]];
+		}
+	}
+	 
+	return prop
+		?	totals[prop]
+		:	totals;
+}
+
+_.parent = function( p ) {
+	if ( p !== undefined ) {
+		parentElement = p;
+		return _.render();
+	} else {
+		return parentElement;
+	}
+}
+
+_.tabParent = function( t ) {
+	if ( t !== undefined ) {
+		tabParentElement = t;
+		return _.render();
+	} else {
+		return tabParentElement;
+	}
+}
+
+_.render = function() {
+
+	return _;
+}
+
+_.render.tab = function( tabParent ) {
+	
+	tabParent = tabParent || tabParentElement;
+	
+	var tab;
+	
+	if ( !(tab = $("#roster-" + id + "-select")[0]) ) {
+		tab = document.createElement("div");
+		$(tabParent).append(tab);
+	} 
+			
+	tab.innerHTML = "<input type='text' value='" + name + "' />";
+	
+	return _; 
+
+}
+
+_.render.body = function ( current ) {
+	
+	var stat_head = ["Player", "AB", "R", "H", "RBI", "SO", "BB", "LOB", "AVG"];
+	var stat_items = [
+		"ab",
+		"r",
+		"h",
+		"rbi",
+		"k",
+		"bb",
+		"lob",
+	];
+	
+	var totals = _.totals();
+	
+	var html = "<table id='roster-" + id + "' >\
+		<tr>\n";
+	for ( var j=0; j<stat_head.length; j++ ) {
+		html += "<th>" + stat_head[j] + "</th>\n";
+	}
+
+	for (var i=0; i<lineup.length; i++ ) {
+
+		if ( lineup[i]  ) {
+				
+			var cur = current &&
+				current.team == id && 
+				current.batter == lineup[i]
+					?	" class='current' "
+					:	"";
+			html += "<tr " + cur + " onclick='rmove(0," + i + ")' id='r-" + id + "-" + i + "' >\n";
+			
+			html += "<td>" + lineup[i].info.name_display_last_init + "</td>\n";
+			for ( var j=0; j<stat_items.length; j++ ) {
+				html += "<td>" + lineup[i].game[stat_items[j]] + "</td>\n";			
+			}
+			html += "<td>" + lineup[i].game.t_avg() + "</td>\n";
+			
+			
+		}
+			
+		else {
+			html += "<tr onclick='add(0," + i + ")' id='ra" + i + "' ><td colspan='9' >[Insert Player]</td></tr>";
+		}
+
+	}
+	
+	html += "<tr style='font-weight:bold; background:#eee; ' ><td></td>\n";
+	for ( var j=0; j<stat_items.length; j++ ) {
+		html += "<td>" + totals[stat_items[j]] + "</td>\n";			
+	}	
+	
+	html += "<td></td></tr>\n";
+
+	html += "</table>";
+
+	return html;
+}
+
+
+
+
+return _;
+
+}
+var Player = function( type, data ) {
+	
+	var _ = {};
+	_.type = type;
+	_.info = data;
+	_.game = type == "hitter" 
+	
+		//game hitting stats
+		? 	{
+				ab: 0, 
+				pa: 0,
+				h: 0,
+				doubles: 0,
+				triples: 0,
+				hr: 0,
+				bb: 0,
+				k: 0,
+				sf: 0,
+				rbi: 0,
+				r: 0,
+				lob: 0,
+				competitionFactor: Math.random() + 0.5,
+				log: [],
+				t_avg: function() {
+					var avg = Math.round(1000*(_.info.h 
+						+ _.game.h)/(_.info.ab + _.game.ab))/1000;
+					
+					var oz = "000";
+					
+					avg = "" + avg;
+					
+					avg = avg.substr(1) + oz.substr(0, 5 - avg.length);	
+						
+					return avg;
+				},
+				t_rbi: function() {
+					return _.info.rbi + _.game.rbi;
+				},
+				t_hr: function() {
+					return _.info.hr + _.game.hr;
+				}
+				
+			} 
+			
+		// game pitching stats
+		:	{
+				ip: 0,
+				ab: 0,
+				bf: 0,
+				np: 0,
+				k: 0,
+				bb: 0,
+				wp: 0,
+				bk: 0,
+				hr: 0,
+				doubles: 0,
+				triples: 0,
+				h: 0,
+				r: 0,
+				er: 0,
+				competitionFactor: Math.random() + 0.5,
+				log: [],
+				strikeLikelihood: Math.random()*(0.45) + 0.30,
+				pitches:0,
+				strikes:0,
+				balls:0,
+				era: function() {
+					var era =  Math.round(
+						100* 9 * (_.info.er + _.game.er)/(_.game.adj_t_ip()))/100;
+					
+					era = "" + era;
+					
+					var oz = "00";
+
+					era = era.substr(0) + oz.substr( 0, 4 - era.length );
+					
+					
+					return era;
+				},
+				thirdInningTick: function() {
+					if ( _.game.ip%1 == .1 || _.game.ip%1 == 0) {
+						_.game.ip+= .1;
+					} else {
+						_.game.ip = Math.floor(_.game.ip) + 1;
+					}
+				},
+				adj_t_ip: function() {
+				
+					var toDecimal = function(e) {
+						var d = e|0;
+						if ( e - d == .1 ) {
+							d += .33333333;
+						} else if ( e - d == .2 ) {
+							d += .66666667
+						}
+						return d;
+					
+					}
+					var sum = toDecimal(_.info.ip) + toDecimal(_.game.ip);			
+					
+					return sum;
+				}
+			}
+		
+		
+		//Copy over stats adjusted for competition factor
+		
+		var statsToIgnore = ["avg", "era"];
+		for ( var stat in data ) {
+			if ( !isNaN(data[stat]-0) ) {
+				//to eliminate the 0 in AVG, don't numerize it.
+				//we use the competition-factor-adjusted avg in simulations anyway.
+				if ( statsToIgnore.indexOf(stat) == -1 ) {
+					_.info[stat] = _.info[stat] - 0;
+				}
+				_[stat] = (_.info[stat] - 0) * _.game.competitionFactor;
+			}
+		}
+		
+		return _;
+
+}
+function Game( setup ) {
+
+return (function() {
+
+	var _ = {};
+
+	var teamIds = setup.teamIds;
+	
+	_.init = function() {
+		
+		// _.loaded will run when all functions are loaded
+		/*_.load ( teamIds[0], "hitting" ) 			//DET 
+			.load ( teamIds[0], "pitching" )				
+			.load ( teamIds[1], "hitting" )			//WAS
+			.load ( teamIds[1], "pitching" );*/
+			
+		//_.stats = JSON.parse(localStorage.cache); 
+		//_.loaded();
+		
+		_.loaded();
+		
+		return _;
+			
+	}
+	
+	_.stats = {
+		pitching: false,
+		hitting: false
+	}
+	
+	loadWait = [];
+		
+	_.load = function ( team_id, type, cb ) {
+	
+		cb = cb || _.loaded;
+		loadWait.push( {team: team_id, type: type, loaded: false, callback:cb} );
+		
+		var sortBy = (type=="hitting")
+			?	'ab'
+			:	"ip";
+		var ud = type=="hitting"
+			?	'desc'
+			:	sortBy=="era"
+				?	'asc'
+				:	"desc";
+				
+		var player_pool = "QUALIFIER";
+	
+		var team = "";
+		if ( team_id ) { 
+			team = "&team_id=" + team_id;
+			player_pool = "ALL";
+		}
+
+		var url = "http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?season=2016&sort_order='" 
+			+ ud + "'" + team + "&sort_column='" + sortBy + "'&stat_type=" + type
+			+ "&page_type=SortablePlayer&game_type='R'&player_pool=" + player_pool
+			+ "&season_type=ANY&sport_code='mlb'&results=1000&recSP=1&recPP=50";
+
+		var callback= function (d, s) {
+			
+			try {
+				d = JSON.parse(d).stats_sortable_player.queryResults.row;
+			} catch (e) {
+				console.log ("Unable to parse result " + d + " for input " + s.team + " - " + s.type);
+				return false;
+			}
+			if ( s.team == "" ) {
+				if ( s.type == "hitting" ) {
+					_.stats.hitting = d;
+				} else {
+					_.stats.pitching = d;
+				}
+			} else {
+				_.stats[s.team] = _.stats[s.team] || {
+					hitting:false,
+					pitching:false
+				}
+				if ( s.type == "hitting" ) {
+					_.stats[s.team].hitting = d;
+				} else {
+					_.stats[s.team].pitching = d;
+				}
+			
+			}
+			
+			loadWait.splice( loadWait.indexOf(s), 1 );
+			
+			if ( s.callback ) {
+				s.callback();
+			}
+
+		}
+
+		_.ajax(url, callback, loadWait[loadWait.length-1]);
+		
+		return _;
+
+	}
+	
+	_.loaded = function() {
+		
+		if ( loadWait.length ) {
+			return;
+		}
+		
+		_.stats = setup.stats;
+		
+		var player_cnt = 9;
+		
+		teams[0] = setup.lineups[0]; //_.stats[teamIds[0]].hitting.slice(0, player_cnt);
+		teams[1] = setup.lineups[1]; //_.stats[teamIds[1]].hitting.slice(0, player_cnt);
+				
+		for ( var i=0; i<player_cnt; i++ ) {
+			for ( var j=0; j<teams.length; j++ ) {
+				teams[j][i] = new Player("hitter", teams[j][i]);
+			}
+		}
+		
+		var pitchers = [
+			new Player("pitcher", _.stats[teamIds[0]].pitching[setup.teamPitcherIds[0] ]),
+			new Player("pitcher", _.stats[teamIds[1]].pitching[setup.teamPitcherIds[1] ]),			
+		]
+		
+		teams[0] = new Team(teams[0], pitchers[0]);
+		teams[1] = new Team(teams[1], pitchers[1]);
+				
+		//let's set up an at bat!
+		
+		curBatter = teams[0].lineup(0);
+		curPitcher = pitchers[1];
+		
+		_.render();
+		
+		narrative();
+		
+		//fullGameSimulation();
+		
+	
+	
+	}
+	
+	
+	_.render = function() {
+		$("#rostera").html(teams[0].render.body(_.current()));
+		$("#rosterb").html(teams[1].render.body(_.current()));
+		
+		$("#rostera-select input").val(teams[0].name());
+		$("#rosterb-select input").val(teams[1 ].name());
+	
+		
+		_.render.matchup();
+		
+		_.render.boxscore();
+		
+		$("#scores").html( teams[0].name() + " " + score[0] + " " + teams[1].name() + " " + score[1]);
+		
+		var tb = curTeam == 0 
+			?	"Top "
+			:	"Bot ";
+		
+		$("#inning").html( tb + curInning + " - " + outs + " Out" );
+		
+		
+		var classes = [
+			"home",
+			bases[0] ? "full" : "empty",
+			bases[1] ? "full" : "empty",
+			bases[2] ? "full" : "empty"		
+		];
+		
+		var runners = "<table>\
+			<tr>\
+				<td class='" + classes[3] + "' > </td>\
+				<td class='" + classes[2] + "' > </td>\
+			</tr>\
+			<tr>\
+				<td class='" + classes[0] + "' > </td>\
+				<td class='" + classes[1] + "' > </td>\
+			</tr>\
+		</table>";
+		
+		$("#runners").html(runners);
+		
+		return _;
+	}
+	
+	_.render.openPlayerPanel = function( id ) {
+		$("#playerPanel").attr("src", "http://m.mlb.com/gameday/player/" + id ).show();
+
+	}
+	
+	_.render.boxscore = function() {
+		
+		var html = "<table>";
+		
+		var head = " 123456789RHE".split("");
+		
+		for ( var i=0; i<head.length; i++ ) {
+			html += "<td>" + head[i] + "</td>";
+		}
+		
+		for ( var i=0; i<teams.length; i++ ) {
+			html += "<tr class='line' >"
+			html += "<td class='logo' >" 
+			html += teams[i].name();
+			html += "</td>";
+			for ( var j=0; j<9; j++ ) {
+				var cls = curTeam == i && curInning == j+1 
+					? 	"cur"
+					:	"";
+				html += "<td class='" + cls + "' >";
+				html += boxscore[i][j];
+				html += "</td>";
+			}
+			
+			html += "<td class='runs' >";
+			html += score[i];
+			html += "</td>";
+
+			html += "<td class='hits' >";
+			html += teams[i].totals("h");
+			html += "</td>";
+			html += "<td>0</td>"; //we don't compute errors yet :)
+			html += "</tr>";
+		}
+		
+		html += "</table>";
+		
+		$("#boxscore").html(html);
+	}
+	
+	_.render.matchup = function() {
+		//Render batter & pitcher
+		
+		var bh = "<table>";
+		
+		bh += "<tr>";
+		bh += "<td class='mug' ><img src='" 
+			+ "http://gdx.mlb.com/images/gameday/mugshots/mlb/" + curBatter.info.player_id + "@2x.jpg"
+			+ "' /></td><td class='stats' ";
+		bh += "<div><strong>At Bat</strong></div>\
+			<div><strong>" + curBatter.info.last_name + "</strong>\
+			<span class='gray' >#" + curBatter.info.jersey_number + " " + curBatter.info.pos + "</span></div>\
+			<div><span class='gray' >\
+			" + curBatter.game.h + "-" + curBatter.game.ab + ", \
+			" + curBatter.game.t_avg() + " AVG, " + curBatter.game.t_hr() + " HR, " + curBatter.game.t_rbi() + " RBI\
+			</span></div>\
+			</td>";
+		
+		bh += "</tr>";
+		bh += "</table>";
+		
+		 
+		var ph = "<table>";
+		
+		ph += "<tr>";
+		ph += "<td class='mug' ><img src='" 
+			+ "http://gdx.mlb.com/images/gameday/mugshots/mlb/" + curPitcher.info.player_id + "@2x.jpg"
+			+ "' /></td><td class='stats' ";
+		ph += "<div><strong>Pitching</strong></div>\
+			<div><strong>" + curPitcher.info.last_name + "</strong>\
+			<span class='gray' >#" + curPitcher.info.jersey_number + " " + curPitcher.info.throws + "HP" + "</span></div>\
+			<div><span class='gray' >\
+			" + curPitcher.game.era() + " ERA, " + curPitcher.game.pitches + "P (" + 
+			curPitcher.game.strikes + "S, " + (curPitcher.game.balls) + "B)\
+			</span></div>\
+			</td>";
+		
+		ph += "</tr>";
+		ph += "</table>";
+		
+		$("#bcard").html(bh);
+		$("#pcard").html(ph);
+		
+	
+	
+	}
+	
+	
+	
+	var boxscore = (function() {
+		var b = [[], []];
+		for ( var i=0; i<b.length; i++ ) {
+			for ( var j=0; j<9; j++ ) {
+				b[i][j] = "";
+			}
+		}
+		
+		return b;
+	})();
+	
+	var Pitch = function( name, freq, lowSpeed, hiSpeed ) {
+		this.name = name;
+		this.nameCap = function() {
+			return this.name[0].toUpperCase() + this.name.substr(1);
+		}
+		this.freq = freq;
+		this.lowSpeed = lowSpeed;
+		this.hiSpeed = hiSpeed;
+		this.speed = function() {
+			return Math.floor( Math.random()*(hiSpeed-lowSpeed+1) + lowSpeed );
+		}
+		this.isStrike = function() {
+			return Math.random() < curPitcher.game.strikeLikelihood;
+		}
+		return this;
+	}
+	
+	var pitches = [
+		new Pitch ("fastball", 0.5, 87, 98),
+		new Pitch ("changeup", 0.2, 79, 89),
+		new Pitch ("slider", 0.2, 86, 95),
+		new Pitch ("curveball", 0.05, 84, 94),
+		new Pitch ("knuckleball", 0.04, 87, 93),
+		new Pitch ("eephus", 0.01, 60, 80)		
+	];
+	
+	pitches.random = function( ) {
+	
+		var x = Math.random(), cdf = 0;
+		for ( var i=0; i<pitches.length; i++ ) {
+			cdf += pitches[i].freq;
+			if ( x <= cdf ) {
+				return pitches[i];
+			}
+		}
+	}
+	
+	var Position = function( playerName, region, symbol, number ) {
+		this.playerName = playerName;
+		this.region = region;
+		this.number = number;
+		return this;
+	}
+	
+	var positions = [
+		new Position( "pitcher", "the mound", "P", 1),
+		new Position( "catcher", "behind the plate", "C", 2),
+		new Position( "first baseman","first base", "1B", 3),
+		new Position( "second baseman","second base", "2B", 4),
+		new Position( "third baseman","third base", "3B", 5),
+		new Position( "shortstop","shortstop", "SS", 6),
+		new Position( "left fielder","left field", "LF", 7),
+		new Position( "center fielder","center field", "CF", 8),
+		new Position( "right fielder","right field", "RF", 9)
+	];
+	
+	positions.random = function( region ) {
+	
+	
+		var poss = positions.slice(0, positions.length);
+		
+		if ( region == "of" ) {
+			poss = positions.slice(6, 9);
+		} else if ( region == "mif" ){
+			poss = positions.slice(2,5).concat([positions[0]]);
+		} else if ( region == "noc" ) {
+			poss = positions.slice(1,9);
+		}
+
+		return poss[Math.random()*poss.length|0];
+	}
+	
+	
+	var bases = [
+		0,
+		0,
+		0	
+	];
+	
+	var score = [0, 0];
+	
+	score.up = function(team) {
+		team = team || curTeam;
+		score[team]++;
+		runsThisHalfInning++;
+	}
+	
+	_.scoringPlays = [];
+	
+	var didScore = false;
+	
+	var outs = 0;
+	
+	var runsThisHalfInning = 0;
+	
+	recordOut = function() {
+		outs ++;
+		curPitcher.game.thirdInningTick();
+		var ret = "";
+		//_.output(outs + " outs.");
+		ret += " " + outs + " Out";
+		
+		var lob = 0, bl = bases.length - 1;
+		while ( bl-->0 ) {
+			lob += bases[bl] == 0 ? 0 : 1;
+		}
+		
+		curBatter.game.lob += lob;
+		
+		if ( outs > 2 ) {
+			
+				
+			boxscore[curTeam][curInning-1] = runsThisHalfInning;
+			runsThisHalfInning = 0;
+			outs = 0;
+			curPitcher = teams[curTeam].pitcher();
+
+			curTeam = 1 - curTeam;
+			
+			bases = [0,0,0];
+			
+			var phrase = curTeam == 0
+				?	"Top "
+				: 	"Bot ";
+				
+				
+	
+			if ( curTeam == 0 ) {
+				curInning ++;
+			}
+			
+			//_.output(phrase + curInning);
+			//gameLog.push({text:phrase + curInning,cls:"strong"});
+		
+		}
+		
+		return ret;
+	}
+		
+	var curBatter, curPitcher;
+	
+	var curTeam = 0;
+	
+	_.current = function() {
+		return {
+			team: curTeam,
+			inning: curInning,
+			batter: curBatter,
+			pitcher: curPitcher		
+		}
+	}
+	
+	var curBatterIds = [0,0];
+		
+	var teams = [0, 0];
+	
+	var curInning = 1;
+	
+	function nextBatter() {
+		// First batter of game should be 0 :)
+		// The "Anthony Rendon Clause"
+		curBatterIds[curTeam] = 
+			teams[curTeam].totals("pa") == 0
+			?	0
+			:	(curBatterIds[curTeam]+1)%9;
+		
+		curBatter = teams[curTeam].lineup(curBatterIds[curTeam]);
+	}
+	
+	_.playbook = {
+		BASEFROMI : function(i) {
+			switch(i) {
+				case 0:
+					return " to first. ";
+					break;
+				case 1:
+					return " to second. ";
+					break;
+					
+				case 2:
+					return " to third. ";
+					break;
+				default:
+					return " scores. ";
+					break;
+					
+			}			
+		}
+	}
+	
+	function tagUp(batter) {
+	
+	
+		var LIKELIHOOD_OF_SACRIFICE_ON_FLY_BALL = 0.5;
+		var ret = "";
+		var sac = false;
+		
+		if ( outs > 1 || Math.random() > LIKELIHOOD_OF_SACRIFICE_ON_FLY_BALL ) {
+			return 0;
+		}
+		if ( bases[2] ) {
+			bases[2].game.r++;
+			batter.game.rbi++;
+			curPitcher.game.er++;
+			curPitcher.game.r++;
+			sac = true;
+			ret += bases[2].info.name_display_first_last + _.playbook.BASEFROMI(3);
+			bases[2] = 0;
+			score.up();
+			didScore = true;
+
+		}
+		if ( bases[1] && !bases[2]) {
+			
+			sac = true;
+			ret += bases[1].info.name_display_first_last + _.playbook.BASEFROMI(2);
+			bases[2] = bases[1];
+			bases[1] = 0;
+
+		}
+		if ( sac ) {
+			batter.game.ab--;
+			curPitcher.game.ab--;
+		}
+		
+		return sac
+			?	ret
+			:	0;
+	}
+	
+	function advanceBase(k, batter, walk) {
+		var ret = "";
+		var iscore = false;
+		
+		function force( p ) {
+			var isForce= true;
+			for ( var i=0; i<=p; i++ ) {
+				if ( !bases[p] ) {
+					isForce = false;
+				}
+			}
+			return isForce;
+		}
+		
+		
+		for ( var i=bases.length-1; i>-1; i-- ) {
+			
+			var npos = !walk || (walk && force(i))
+				?	i + k
+				:	i;
+			
+			//Runners in scoring position
+			if ( !walk && i>1) {
+				++npos;
+			}
+		
+		
+			//score
+			if ( npos >= bases.length && bases[i] ) {
+				score.up();
+				ret += bases[i].info.name_display_first_last + _.playbook.BASEFROMI(npos);
+				bases[i].game.r++;
+				batter.game.rbi++;
+				curPitcher.game.er++;
+				curPitcher.game.r++;
+				bases[i] = 0;
+				iscore = true;
+				
+			} else {
+				if ( bases[i] ) {
+					bases[npos] = bases[i];
+					ret += bases[i].info.name_display_first_last + _.playbook.BASEFROMI(npos);
+					if ( i != npos ) {
+						bases[i] = 0;
+					}
+				}
+			}
+		}
+		
+		//batter
+		if ( k-1 < bases.length ) { 
+			bases[k-1] = batter;
+		} else {
+			score.up();
+			batter.game.r++;
+			batter.game.rbi++;
+			curPitcher.game.r ++;
+			curPitcher.game.er++;
+			iscore = true;
+		}
+		if ( iscore ) {
+			ret += " Score: " + score[0] + "-" + score[1];
+			didScore = true;
+		}
+		return ret;
+	}
+		
+	var Play = function( outcome, batter, pitcher, text ) {
+		this.outcome = outcome;
+		this.batter = batter;
+		this.pitcher = pitcher;
+		this.text = text;
+	
+	}
+	
+	_.output = function(text, cls) {
+		
+		$("#output").html(
+			"<div class='out " + (cls?cls:"") + "' >"
+			+ text + "<hr>" + "</div>" + $("#output").html()
+			
+		);
+	}
+	
+	function average( stat1, stat2, batter, pitcher ) {
+	
+		var avg = ( batter.info.tpa * stat1 + pitcher.info.tbf * stat2 ) /
+			( batter.info.tpa + pitcher.info.tbf );
+			
+		return avg;
+		
+	}
+	
+	var battedBallType = function( batter, pitcher, isHit, type ) {
+		if ( type == "ANY" || !type ) {
+			var ga = average( batter.info.go_ao, pitcher.info.go_ao, batter, pitcher );
+			var pctG = ga/(ga + 1);
+			
+			type = Math.random() <= pctG
+				? "g" 
+				: "a";
+		}
+		
+		
+		var ret = "";
+		
+		var pos = positions.random();
+		
+		if ( type == "g" ) {
+		
+			pos = positions.random("noc");
+			
+			if ( isHit ) {
+				ret += "on a ground ball to " + pos.region + ".";
+			} else {
+				pos = positions.random("mif");
+				//check for double play
+				var DP_LIKELIHOOD = 0.6, FORCEOUT_LIKELIHOOD = 0.9;
+				if ( outs < 2 && bases[0] && Math.random() < DP_LIKELIHOOD ) {
+					ret += "grounds into a double play, " + pos.playerName + " to " + positions[2].playerName + ".";
+					outs ++;
+					curPitcher.game.thirdInningTick();
+					bases[0] = 0;
+				} else if ( bases[0] ) {
+					ret += "grounds into a force out, " + pos.playerName + " to " + positions[3].playerName + ".";
+					bases[0] = batter;
+					
+				} else {
+					ret += "grounds out to the " + pos.playerName + ".";
+				}
+			}
+		
+		} else {
+			var types = [
+				{out:"pops out",hit:"pop up"},
+				{out:"lines out",hit:"line drive"},
+				{out:"flies out",hit:"fly ball"},
+			];
+			var type = types[Math.random()*types.length|0];
+			
+			if (isHit) {		
+				pos = positions.random("of");
+				ret += "on a " + type.hit + " to " + pos.region + ". ";
+			} else {
+				pos = positions.random();
+				var sacFly = tagUp(batter);
+				if (sacFly) {
+					pos = positions.random("of");
+					ret += " out on a sacrifice fly to the " + pos.playerName + ". " 
+						+ sacFly;
+				} else {
+					ret += type.out + " to the " + pos.playerName + ". ";
+				}
+			}
+		
+		}
+		
+		return ret;
+	
+	}
+	
+	var gameLog = [];
+		
+	_.simulate = function(batter, pitcher) {
+		
+		_.render(); 
+		
+		gameLog = [];
+		
+		batter = batter || curBatter;
+		pitcher = pitcher || curPitcher;
+		
+		didScore = false;
+	
+		
+		// How does the at bat end?
+		
+		var isOut = false;
+		
+		var isInPlay = true;
+		var	isWalk = false;
+		var isK = false;
+		var isSwingingK = false;
+		
+		// Odds of walking (ignoring sac flies)
+		
+		var walkPct = average( batter.info.bb/batter.info.tpa, pitcher.info.bb/pitcher.info.tbf, batter, pitcher) ;
+		
+		var ptext = batter.info.name_display_first_last;
+		
+		
+		var pct = Math.random();
+				
+		batter.game.pa ++;
+		pitcher.game.bf ++;
+
+		if (pct < walkPct ) {
+			//A walk
+				ptext += " walks. ";
+				
+				ptext += advanceBase(1, batter);
+	
+				batter.game.log.push(new Play("bb", batter, pitcher, ptext));
+				pitcher.game.log.push(new Play("bb", batter, pitcher, ptext));
+				
+				batter.game.bb ++;
+				pitcher.game.bb ++;
+				
+				isInPlay = false;
+				isWalk = true;
+				isK = false;
+						
+		} 
+		
+		else {
+			//Part of an official at bat.
+			
+			batter.game.ab++;
+			pitcher.game.ab++;
+			var pct = Math.random();
+			
+			// Using competition-factor adjusted average
+			var hitPct = average( batter.avg, pitcher.avg, batter, pitcher );
+			
+			if ( pct <= hitPct ) {
+				
+				//we got a hit! What kind of hit?
+				batter.game.h++;
+				pitcher.game.h++;
+				
+				var hrPctMark = average(
+					batter.info.hr/batter.info.ab,
+					pitcher.info.hr/pitcher.info.ab,
+					batter,
+					pitcher				
+				);
+				
+				
+				// For remaining probability marks, don't know pitcher's percentage 
+				var triplePctMark = hrPctMark + batter.info.t/batter.info.ab;
+				
+				var doublePctMark = triplePctMark + batter.info.d/batter.info.ab;
+
+				if ( pct <= hrPctMark ) {
+					//Homer! :)
+					
+					batter.game.hr++;
+					pitcher.game.hr++;
+					
+					ptext += " homers " + battedBallType(batter, pitcher, true, "a");
+				
+					ptext += advanceBase(4, batter);
+	
+					batter.game.log.push(new Play("hr", batter, pitcher, ptext));
+					pitcher.game.log.push(new Play("hr", batter, pitcher, ptext));
+									
+					
+				} else if ( pct <= triplePctMark ) {
+					
+					//triple
+					batter.game.triples++;
+					pitcher.game.triples++;
+					
+					ptext += " triples " + battedBallType(batter, pitcher, true);
+				
+					ptext += advanceBase(3, batter);
+	
+					batter.game.log.push(new Play("3b", batter, pitcher, ptext));
+					pitcher.game.log.push(new Play("3b", batter, pitcher, ptext));
+
+					
+				} else if ( pct <= doublePctMark ) {
+					//double
+					batter.game.doubles++;
+					pitcher.game.doubles++;
+					
+					ptext += " doubles " + battedBallType(batter, pitcher, true);
+				
+					ptext += advanceBase(2, batter);
+	
+					batter.game.log.push(new Play("2b", batter, pitcher, ptext));
+					pitcher.game.log.push(new Play("2b", batter, pitcher, ptext));
+
+				
+				
+				} else {
+					//base hit
+					
+					ptext += " singles " + battedBallType(batter, pitcher, true);
+				
+					ptext += advanceBase(1, batter);
+	
+					batter.game.log.push(new Play("1b", batter, pitcher, ptext));
+					pitcher.game.log.push(new Play("1b", batter, pitcher, ptext));
+
+				}
+				
+				
+				
+			
+			} 
+			
+			else {
+			
+				//it's an out.
+				
+				pct -= hitPct;
+				
+				
+				//Odds of striking out
+				
+				var kpct = average ( 
+					batter.info.so/batter.info.ab,
+					pitcher.info.so/pitcher.info.ab,
+					batter,
+					pitcher
+				);
+				
+				if ( pct <= kpct ) {
+					
+					if ( Math.random() < 0.5 ) {
+						ptext += " called out on strikes.";
+						isSwingingK = false;
+					} else {
+						ptext += " strikes out swinging.";
+						isSwingingK = true;
+					}
+					
+					batter.game.k++;
+					batter.game.log.push(new Play("k", batter, pitcher, ptext));
+					pitcher.game.k++;
+					pitcher.game.log.push(new Play("k", batter, pitcher, ptext));
+					
+					isInPlay = false;
+					isK = true;
+					
+					
+				} else {
+					
+					//The ball was hit to somebody. This is the final catch-case, the
+					//'Else' without conditions
+					//Or boundaries.
+					
+					ptext += " " + battedBallType(batter, pitcher, false);
+					pitcher.game.log.push(new Play("out", batter, pitcher, ptext));
+				
+					batter.game.log.push(new Play("out", batter, pitcher, ptext));
+
+					
+				
+				}
+								
+				isOut = true;
+			
+			
+			
+			}
+			
+					
+		}
+		
+
+		//Determine number of pitches
+		var b_pitch_avg = batter.info.tpa / batter.info.np;
+		var p_pitch_avg = pitcher.info.np / pitcher.info.tbf;
+		
+		var avg_np = average( b_pitch_avg, p_pitch_avg, batter, pitcher );
+		
+		var p_low = Math.max(1, Math.floor(avg_np/2));
+		var p_high = Math.max (1, Math.floor(3*avg_np/2));
+		
+		var num_pitches = Math.floor(Math.random()*(p_low+p_high+1)+p_low);
+		
+		function pitchHTML ( strike, number, total ) {
+			var cls = strike
+				?	"strike"
+				:	"ball";
+			if ( number == total  ) {
+				if ( isK ) {
+				 cls = "strike";
+				} else if ( isWalk ) {
+					cls = "ball";
+				} else {
+					cls = "play";
+				}
+			}
+			return "<span class='pitch " + cls + "' >" + number + "</span>";
+		}
+		
+		var finalPitchMsg;
+		
+		if ( isK ) {
+			finalPitchMsg = isSwingingK
+				?	"Swinging Strike"
+				:	"Called Strike";
+		} 
+		else if ( isWalk ) {
+			finalPitchMsg = "Ball";
+		} 
+		else if ( didScore ) {
+			finalPitchMsg = "In play, run(s)";
+		} 
+		else if ( !isOut ) {
+			finalPitchMsg = "In play, no out";
+		} 
+		else {
+			finalPitchMsg = "In play, out(s)";
+		}
+		
+		
+		
+		var balls = 0, strikes = 0;
+		
+		
+		for ( var i=0; i<num_pitches; i++ ) {
+		
+			var isFoul = false;
+			var FOUL_LIKELIHOOD = 0.3;
+			var pitch = pitches.random();
+			
+			var isStrike = pitch.isStrike();
+				
+				
+			// mark as foul if ball is in play to get past lower conditions.
+			// will unmark as foul later.		
+			if ( i == num_pitches - 1 && (!isK && !isWalk) ) {
+				isFoul = true;
+			}		
+			
+			// if not a walk, last pitch can't be a ball.
+			if ( !isWalk && num_pitches - 1 == i ) {
+				isStrike = true;
+			}
+
+			
+			// If 4 balls,
+			// if a walk, all is peachy.
+			// Otherwise, convert to a foul.
+			
+			if ( !isStrike && balls == 3 ) {
+				if ( isWalk ) {
+					num_pitches = i + 1;
+				} else {
+					isFoul = true;
+					isStrike = true;
+				}
+			}
+			
+			// If it's a strike: mark as foul if we have 2 strikes and are not on the
+			// last pitch of a strikeout.
+			
+			// Otherwise, mark as a foul sometimes anyway.
+
+			if ( isStrike ) {
+				if ( strikes == 2 && !(isK && i == num_pitches-1) ) {
+					isFoul = true;
+				} else {
+					if ( Math.random() < FOUL_LIKELIHOOD ) {
+						isFoul = true;
+					}
+				}	
+			}	
+			
+			// Last pitch of a walk should (usually) be a ball. We may have to 
+			// increase at bat length anyway
+			
+			if ( isWalk && num_pitches - 1 == i  && Math.random() > FOUL_LIKELIHOOD ) {
+				isStrike = false;
+				isFoul = false;
+			}
+		
+			
+			// On all strikes which are not 2-strike fouls: increase the strike count.
+			// On all surviving balls, increase the ball count.
+			if ( isStrike ) {
+				if ( !isFoul || strikes < 2 ) {
+					strikes ++;
+				}
+			}
+			 else {
+				balls ++;
+			}
+
+			// If it's a walk, and we have less than 4 balls on the last pitch,
+			// throw another pitch!
+			if ( isWalk ) {
+				if ( balls < 4 && i == num_pitches - 1) {
+					num_pitches++;
+				}
+			}
+			
+			// If it's a strikeout, and we have less than 4 balls on the last pitch,
+			// throw another pitch!			
+			if ( isK ) {
+				if ( strikes < 3 && i == num_pitches - 1 ) {
+					num_pitches++;
+				}
+			}
+			
+			// If last pitch of at bat and not a strikeout or ball,
+			// stop pretending it was a foul, increase the strike count.
+			if ( i == num_pitches - 1 && (!isK && !isWalk )) {
+				isFoul  = false;
+				isStrike = true;
+				strikes++;
+			}
+
+			var outcome = num_pitches - 1 == i
+				? 	finalPitchMsg
+				:	isStrike
+					?	"Strike"
+					:	"Ball";
+			if ( isStrike && num_pitches - 1 > i) {
+				var strkType = Math.random();
+				if ( strkType < 0.7 ) {
+					outcome = "Called Strike";
+				} else if ( strkType < 0.95 ) {
+					outcome = "Swinging Strike";
+				} else {
+					outcome = "Foul Tip";
+				}
+			
+			}
+			if ( isFoul ) {
+				outcome = "Foul";
+			}
+			
+			
+			var out = pitchHTML( isStrike, i+1, num_pitches ) 
+				+ "<div class='info' ><strong>" + outcome + "</strong><br>"
+				+ "<span class='gray' >" + pitch.speed() + "MPH " + pitch.nameCap() 
+				+ "</span></div>";
+				
+			if ( isK || isWalk || i < num_pitches-1 ) {
+				out += "<div class='count' >" + balls + "-" + strikes + "</div>";
+			}
+			
+			
+			curPitcher.game.pitches++;
+			if ( isStrike ) {
+				curPitcher.game.strikes++;
+			} 
+			else {
+				curPitcher.game.balls++;
+			}
+			
+			//_.output(out);
+			gameLog.push({text:out,cls:""});
+		
+		}
+		
+		
+		//plate appearance is over!
+			
+		if ( isOut ) {
+			ptext += recordOut();
+		}
+		
+		//_.output(ptext, "strong" );
+		gameLog.push({text:ptext,cls:"strong"});
+
+		if ( didScore ) {
+			_.scoringPlays.push(ptext);
+		}
+		
+		nextBatter();
+		
+		return _;
+	}
+	
+	
+	function next() {
+		if (toGo--) {
+			Baseball = (new Game()).init();
+		} else {
+			console.log(wins);
+			console.log(totalScore);
+			console.log ("Win probs:");
+			
+			var prob = [
+				wins[0] / (wins[0] + wins[1]),
+				wins[1] / (wins[0] + wins[1])
+			];
+			console.log(prob);
+		}
+	}
+	
+	
+	function fullGameSimulation() {
+		while ( curInning < 10 ) {
+			_.simulate();
+		}
+		_.output( score );
+		
+		totalScore[0] += score[0];
+		totalScore[1] += score[1];
+		
+		if ( score[0] > score[1] ) {
+			wins[0] ++;
+		} else if ( score[1] > score[0] ) {
+			wins[1] ++;
+		}
+		
+		//next();
+	}
+	
+	function narrative() {
+		if ( gameLog.length == 0 ) {
+			_.render().simulate();
+		}
+		
+		var message = gameLog.shift();
+		
+		_.output( message.text, message.cls );
+		
+		setTimeout( narrative, Math.random()*8000 + 5000);
+	
+	}
+	
+	_.ajax = function ( url, callback, variable, method, async, fn ) {
+
+		if ( !url ) return;
+		callback = callback || function(){};
+		method = method || "GET";
+		async = (async !== undefined)
+			? async
+			: true;
+
+		var _ = (window.XMLHttpRequest)
+			? new XMLHttpRequest()
+			: new ActiveXObject("Microsoft.XMLHTTP");
+							
+		_.onreadystatechange = function() {
+			
+			if (_.readyState==4 && _.status==200) {
+				if ( !fn || fn(_.responseText) ) {
+					callback(_.responseText, variable);
+				}
+			}
+				
+		}
+			
+		_.open(method, url, async);
+		_.send();
+	
+	}
+
+	
+	return _;
+
+})();
+
+}
+
+
+var toGo = 500;
+
+$("document").ready(function() {
+
+//var Baseball = (new Game()).init();
+	
+});
+
+var wins = [0,0];
+var totalScore = [0,0];
+
+
+</script>
+
+
+
+
+
+
+
+<script type='text/javascript' >
+
+{
+//variables
+
+var base = 'http://knomatic.net/baseball/';
+
+var game = {
+
+rosterA: [], 
+
+rosterB: [],
+
+rosterPositions: ["1B","2B","3B","SS","C","P","DH","LF","RF","CF"],
+
+teamNames: { A: "rosterA", B: "rosterB"},
+
+currentlyActiveRoster: 0,
+
+query: null,
+
+srchtype: "hitting"
+
+}
+
+function getStats( sortBy ) {
+
+var type = game.srchtype;
+sortBy = sortBy?sortBy:(type=="hitting")?'avg':"era";
+var ud = type=="hitting"?'desc':sortBy=="era"?'asc':"desc";
+var team_id = $("#team_id").val();
+var player_pool = "QUALIFIER";
+
+if ( team_id.length > 0 ) { 
+team_id = "&team_id=" + team_id;
+player_pool = "ALL";
+}
+else team_id = "";
+
+var url = "http://mlb.mlb.com/pubajax/wf/flow/stats.splayer?season=2016&sort_order='"+ud+"'" + team_id + "&sort_column='"+sortBy+"'&stat_type=" + type + "&page_type=SortablePlayer&game_type='R'&player_pool=" + player_pool + "&season_type=ANY&sport_code='mlb'&results=1000&recSP=1&recPP=50";
+
+var callback= function (d, s) {
+
+game.query = d;
+
+game.parsed_results = JSON.parse(d);
+game.parsed_results = game.parsed_results.stats_sortable_player.queryResults.row;
+
+fillSearchResults(s);
+
+}
+
+//AJAX(url, callback, sortBy);
+
+
+}
+
+function cst ( a ) {
+
+$("#srchtype a").removeClass("on");
+
+game.srchtype = a;
+
+$("#srchtype a." + a).addClass("on")
+
+}
+
+function fillSearchResults() {
+
+if (game.srchtype == "pitching" ) {
+
+var html="<table id='sres' ><tr><th>Team</th><th>Player</th><th>W</th><th>L</th><th>ERA</th><th>IP</th><th>SO</th></tr>";
+
+for (var i=0; i<game.parsed_results.length; i++ ) {
+
+html += "<tr onclick='move(" + i + ")' ><td>" + game.parsed_results[i].team_abbrev + "</td><td>" 
+			+ game.parsed_results[i].name_display_last_first + "</td><td>" 
+			+ game.parsed_results[i].w + "</td><td>" 
+			+ game.parsed_results[i].l + "</td><td>" 
+			+ game.parsed_results[i].era + "</td><td>" 
+			+ game.parsed_results[i].ip + "</td><td>" 
+			+ game.parsed_results[i].so + "</td><td></tr>" 
+}
+
+
+html += "</table>";
+
+
+}
+
+else {
+
+var html="<table id='sres' ><tr><th>Team</th><th>Player</th><th>POS</th><th>AVG</th><th>AB</th><th>R</th><th>2B</th><th>3B</th><th>HR</th><th>RBI</th><th>SB</th><th>OBP</th><th>SLG</th></tr>";
+
+for (var i=0; i<game.parsed_results.length; i++ ) {
+
+html += "<tr onclick='move(" + i + ")' ><td>" + game.parsed_results[i].team_abbrev + "</td><td>" 
+			+ game.parsed_results[i].name_display_last_first + "</td><td>" 
+			+ game.parsed_results[i].pos + "</td><td>" 
+			+ game.parsed_results[i].avg + "</td><td>" 
+			+ game.parsed_results[i].ab + "</td><td>" 
+			+ game.parsed_results[i].r + "</td><td>" 
+			+ game.parsed_results[i].d + "</td><td>" 
+			+ game.parsed_results[i].t + "</td><td>" 
+			+ game.parsed_results[i].hr + "</td><td>" 
+			+ game.parsed_results[i].rbi + "</td><td>" 
+			+ game.parsed_results[i].sb + "</td><td>" 
+			+ game.parsed_results[i].obp + "</td><td>" 
+			+ game.parsed_results[i].slg + "</td><td></tr>" 
+}
+
+
+html += "</table>";
+
+
+}
+
+$("#sresbox").html(html);
+
+}
+
+function arr2str( arr ) {
+
+var a = "";
+
+for ( var i=0; i<arr.length; i++ ) {
+	for ( x in arr[i] ) {
+		a += arr[i][x];		
+	}
+}
+	
+return a;
+
+}
+
+function add( roster, line ) {
+
+var p = game.parsed_results[ game.selectedPlayer ];
+
+if ( arr2str(game.rosterA).indexOf(p.name_display_roster)<0 && arr2str(game.rosterB).indexOf(p.name_display_roster)<0 ) {
+
+if ( roster == 0 ) {
+
+game.rosterA[line] = p;
+
+}
+
+else {
+
+game.rosterB[line] = p;
+
+}
+
+}
+
+else {
+
+if ( $("#follow").html().length ) {
+	alert("This player is already in the roster.");
+}
+
+}
+
+var h = render_roster_init();
+
+$("#rostera").html(h[0]);
+$("#rosterb").html(h[1]);
+$("#follow").html("").hide();
+
+}
+
+function move( k ) {
+
+$("#follow").show().html( game.parsed_results[k].name_display_first_last );
+
+game.selectedPlayer = k;
+
+}
+
+function render_roster_init () {
+
+var html = "<table id='rosterai' ><tr><th>Player</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>SO</th><th>BB</th><th>LOB</th><th>AVG</th></tr>";
+
+for (var i=0; i<9; i++ ) {
+
+if ( game.rosterA[i] )
+html += "<tr onclick='rmove(0," + i + ")' id='ra" + i + "' >\
+			<td>" + game.rosterA[i].name_display_roster + "</td>\
+			<td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>\
+			<td>" + game.rosterA[i].avg + "</td></tr>";
+			
+else html += "<tr onclick='add(0," + i + ")' id='ra" + i + "' ><td colspan='9' >[Insert Player]</td></tr>";
+
+}
+
+html += "</table>";
+
+var html1 = "<table id='rosterbi' ><tr><th>Player</th><th>AB</th><th>R</th><th>H</th><th>RBI</th><th>SO</th><th>BB</th><th>LOB</th><th>AVG</th></tr>";
+
+for (var i=0; i<9; i++ ) {
+
+if ( game.rosterB[i] )
+html1 += "<tr onclick='rmove(1," + i + ")' id='rb" + i + "' >\
+			<td>" + game.rosterB[i].name_display_roster + "</td>\
+			<td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>\
+			<td>" + game.rosterB[i].avg + "</td></tr>";
+			
+else html1 += "<tr onclick='add(1," + i + ")' id='rb" + i + "' ><td colspan='9' >[Insert Player]</td></tr>";
+
+}
+
+html1 += "</table>";
+
+game.rh = [html,html1];
+
+return [html, html1];
+
+}
+
+function rmove ( roster, line ) {
+
+	$("#follow").html("");
+
+
+
+}
+
+function sroster( x ) {
+
+if ( x == 0 ) {
+	$("#rostera-select").addClass("on");
+	$("#rostera").addClass("on");
+	$("#rosterb-select").removeClass("on");
+	$("#rosterb").removeClass("on");
+	game.currentlyActiveRoster = 0;
+	
+}
+
+
+else if ( x == 1 ) {
+	$("#rosterb-select").addClass("on");
+	$("#rosterb").addClass("on");
+	$("#rostera-select").removeClass("on");
+	$("#rostera").removeClass("on");	
+	game.currentlyActiveRoster = 1;
+	
+	
+}
+
+
+
+}
+
+
+function AJAX ( url, callback, variable, method, async, fn ) {
+			
+if ( !url ) return;
+if ( !callback ) callback = function(){};
+if ( !method ) method = "GET";
+if (!async ) async = true;
+
+var x;
+			
+if (window.XMLHttpRequest)
+x=new XMLHttpRequest();
+else
+x=new ActiveXObject("Microsoft.XMLHTTP");
+  					
+x.onreadystatechange=function(){
+			
+if (x.readyState==4 && x.status==200)
+if ( !fn || fn(x.responseText) ) callback(x.responseText, variable);
+  				
+}
+  			
+x.open( method,url,async );
+x.send();	
+}
+
+$(document).ready(function() {
+
+getStats();
+
+var h = render_roster_init();
+
+//$("#rostera").html(h[0]);
+//$("#rosterb").html(h[1]);
+
+$(window).mousemove( function(e) {
+
+$("#follow").css("left",e.pageX+5);
+$("#follow").css("top",e.pageY+5);
+
+});
+
+});
+
+}
+
+</script>
+
+<script>
+
+//Story Writer
+
+// Pass in the array of teams. This includes lineup info, which leads to play-by-play etc.
+var Article = function( teams, score ) {
+	
+	var story = "";
+	
+	//Establish a narrative
+	// Tight, normal, or blowout
+	// Hitting or pitching emphasis?
+	// Player of the game (this could be the bullpen if emphasis pitching and SP worse gamescore than relievers)
+	// Other notable players from both teams
+	
+	function narrative() {		
+		var ret = "";
+		
+		var theme = "normal";
+		
+		var winningId = score[0] > score[1]
+			?	0
+			:	1;
+			
+		var winner = teams[winningId];
+		var loser = teams[1-winningId];
+		
+		winner.score = score[winningId];
+		loser.score = score[1-winningId];
+		
+		// pitching duel
+		if ( winner.score < 4 && loser.score < 3 ) {
+			theme = "pitcher's duel";
+		}
+		
+		// slugfest
+		if ( winner > 6 && loser.score > 5 ) {
+			theme = "slugfest";
+		}
+		
+		var tightness = "normal";
+		
+		if ( winner.score - loser.score < 3 ) {
+			tightness = "tight";
+		} else if ( winner.score - loser.score > 5 ) {
+			tightness = "blowout";
+		}
+		
+		var emphasis = winner.score > 3 
+			?	"hitting"
+			:	"pitching";
+		
+		var listOfWords = {
+			theme : {
+				"normal" : [
+					
+				],
+				"pitcher's duel" : [
+					
+				],
+				"slugfest" : [
+					
+				]
+			},
+			//verb for game outcome
+			tightness : {
+				"normal" : [
+					"defeat",
+					"beat",
+					"down",
+					
+				],
+				"tight" : [
+					"edge"
+				],
+				"blowout" : [
+					"crush",
+					"destroy",
+					"obliterate",
+					"blowout",
+					"rout",
+					"slaughter"
+				]
+			},
+			// verb for what hero player did
+			emphasis: {
+				"hitting" : [
+					"powers",
+					"leads"
+					
+				],
+				"pitching" : [
+				
+				]	
+			}
+		}
+		
+		
+	
+		return ret;
+	}
+	
+	story += "<p>" + narrative() + "</p>\n";
+	
+	
+	// Play by play
+	// Scoring events, pitching jams
+	
+	function playByPlay() {
+		var ret = "";
+	
+	
+		return ret;
+	}
+	
+	story += "<p>" + playByPlay() + "</p>\n";
+	
+	//Player and coach quotes
+	
+	function quotes() {
+		var ret = "";
+	
+	
+		return ret;
+	}
+	
+	story += "<p>" + quotes() + "</p>\n";
+
+	//Broader context ( e.g., overall record, upcoming schedule, tickets lol)
+	function context() {
+		var ret = "";
+	
+	
+		return ret;
+	}
+	
+	story += "<p>" + context() + "</p>\n";	
+	
+	return story;
+	
+	
+}	
+
+</script>
+
+
+</head>
+
+<body>
+
+<div id='follow' ></div>
+
+<div id='main' >
+
+<div id="modeselect" >
+
+<div id='l' >
+
+<span id='limg' ><a href='http://mlb.mlb.com' ><!img src='http://mlb.mlb.com/images/masthead/mlbcom.png' /></a></span>
+<span id='ltext' >Simulation</span>
+</div>
+
+<div id="btnModeChoose" class='mb' >1. Setup</div>
+<div id="btnModeStart" class='active mb'  >2. Run</div>
+<div id="btnModeAnalyze" class='mb' >3. Analyze</div>
+
+</div>
+
+<div id='choose' >
+
+<div id='teams' >
+
+	<h1>1. Choose Teams</h1>
+
+	<div id='chooseTeams-wrap' >
+		<div id='chooseTeamA-wrap' class='fifty' >
+			<h2>Away Team</h2>
+			<select class="team_id" id="selTeamA" ><option value="109">Arizona Diamondbacks</option><option value="144">Atlanta Braves</option><option value="110">Baltimore Orioles</option><option value="111">Boston Red Sox</option><option value="112">Chicago Cubs</option><option value="145">Chicago White Sox</option><option value="113">Cincinnati Reds</option><option value="114">Cleveland Indians</option><option value="115">Colorado Rockies</option><option value="116" selected="selected">Detroit Tigers</option><option value="117">Houston Astros</option><option value="118">Kansas City Royals</option><option value="108">Los Angeles Angels</option><option value="119">Los Angeles Dodgers</option><option value="146">Miami Marlins</option><option value="158">Milwaukee Brewers</option><option value="142">Minnesota Twins</option><option value="121">New York Mets</option><option value="147">New York Yankees</option><option value="133">Oakland Athletics</option><option value="143">Philadelphia Phillies</option><option value="134">Pittsburgh Pirates</option><option value="135">San Diego Padres</option><option value="137">San Francisco Giants</option><option value="136">Seattle Mariners</option><option value="138">St. Louis Cardinals</option><option value="139">Tampa Bay Rays</option><option value="140">Texas Rangers</option><option value="141">Toronto Blue Jays</option><option value="120">Washington Nationals</option></select>
+
+		</div>
+		<div id='chooseTeamB-wrap' class='fifty' >
+			<h2>Home Team</h2>
+			<select class="team_id" id="selTeamB" ><option value="109">Arizona Diamondbacks</option><option value="144">Atlanta Braves</option><option value="110">Baltimore Orioles</option><option value="111">Boston Red Sox</option><option value="112">Chicago Cubs</option><option value="145">Chicago White Sox</option><option value="113">Cincinnati Reds</option><option value="114">Cleveland Indians</option><option value="115">Colorado Rockies</option><option value="116" selected="selected">Detroit Tigers</option><option value="117">Houston Astros</option><option value="118">Kansas City Royals</option><option value="108">Los Angeles Angels</option><option value="119">Los Angeles Dodgers</option><option value="146">Miami Marlins</option><option value="158">Milwaukee Brewers</option><option value="142">Minnesota Twins</option><option value="121">New York Mets</option><option value="147">New York Yankees</option><option value="133">Oakland Athletics</option><option value="143">Philadelphia Phillies</option><option value="134">Pittsburgh Pirates</option><option value="135">San Diego Padres</option><option value="137">San Francisco Giants</option><option value="136">Seattle Mariners</option><option value="138">St. Louis Cardinals</option><option value="139">Tampa Bay Rays</option><option value="140">Texas Rangers</option><option value="141">Toronto Blue Jays</option><option value="120">Washington Nationals</option></select>
+
+		</div>
+	</div>
+	
+	<div class='setup-ctrls' >
+		<button onclick='Setup.transition(1);' >Next</button>
+	</div>
+
+</div>
+
+<div id='players' >
+
+	<h1>2. Choose Players</h2>
+	
+	<div id='choosePitchers-wrap' >		
+		<div class='fifty' >
+			<h2><span class='teamAName' ></span> Starting Pitcher</h2>
+			<select class='teamAPitcher' id='selTeamAPitcher' ></select>
+		</div>
+		<div class='fifty' >
+			<h2><span class='teamBName' ></span> Starting Pitcher</h2>
+			<select class='teamBPitcher' id='selTeamBPitcher' ></select>
+		</div>
+	</div>
+	
+	<hr>
+	
+	<div id='choosePlayers-wrap' >
+	
+	<div class='fifty' >
+
+		<h2><span class='teamAName' ></span> Lineup</h2>
+			
+		<div class='lineupA' ></div>
+
+	</div>
+	<div class='fifty' >
+	
+		<h2><span class='teamBName' ></span> Lineup</h2>
+	
+		<div class='lineupB' ></div>
+	
+	</div>	
+	
+	
+	</div>
+
+	<div class='setup-ctrls' >	
+		<button onclick='Setup.transition(2);' >Start Simulation</button>
+		<button onclick='Setup.transition(0);' >Back</button>
+	</div>
+
+
+</div>
+
+<div id='playerfind' style='display:none;'>
+
+<span id='srchtype' >
+
+<select onchange='getStats()' class="team_id" id="team_id" name="sp_hitting_team_id" ><option value="109">Arizona Diamondbacks</option><option value="144">Atlanta Braves</option><option value="110">Baltimore Orioles</option><option value="111">Boston Red Sox</option><option value="112">Chicago Cubs</option><option value="145">Chicago White Sox</option><option value="113">Cincinnati Reds</option><option value="114">Cleveland Indians</option><option value="115">Colorado Rockies</option><option value="116" selected="selected">Detroit Tigers</option><option value="117">Houston Astros</option><option value="118">Kansas City Royals</option><option value="108">Los Angeles Angels</option><option value="119">Los Angeles Dodgers</option><option value="146">Miami Marlins</option><option value="158">Milwaukee Brewers</option><option value="142">Minnesota Twins</option><option value="121">New York Mets</option><option value="147">New York Yankees</option><option value="133">Oakland Athletics</option><option value="143">Philadelphia Phillies</option><option value="134">Pittsburgh Pirates</option><option value="135">San Diego Padres</option><option value="137">San Francisco Giants</option><option value="136">Seattle Mariners</option><option value="138">St. Louis Cardinals</option><option value="139">Tampa Bay Rays</option><option value="140">Texas Rangers</option><option value="141">Toronto Blue Jays</option><option value="120">Washington Nationals</option></select>
+
+<a href='javascript:cst("hitting");getStats()' class="on hitting" >Hitting</a> | <a href='javascript:cst("pitching");getStats()' class='pitching' >Pitching</a>
+
+</span>
+
+</div>
+
+<div id='chooserow3' style='display:none;' >
+
+<div id="rosterresults" >
+
+Search Results
+
+<div id='sresbox' ></div>
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+</div>
+
+
+<div id='start' >
+
+<div id='scores' ></div>
+<div id='inning' ></div>
+
+<div id='boxscore' ></div>
+
+<div id='match' >
+	<div id='pcard' ></div>
+	<div id='bcard' ></div>
+</div>
+<div id="output" ></div> 
+
+<div id='runners' ></div>
+
+<!--iframe id='playerPanel' ></iframe-->
+
+</div>
+
+<div id='analyze' >
+
+
+</div>
+
+
+
+
+</div>
+
+<div id="currentroster" >
+
+Roster <small>(Click on a team to edit name)</small>
+
+<br><br>
+<div id='rostera-select' class='on' onclick='sroster(0)' ><input type='text' value='Team A' /></div>
+<div id='rosterb-select' onclick='sroster(1)' ><input type='text' value='Team B' /></div>
+
+<br><br><br>
+
+<div id='rostera' class='on' >
+
+
+</div>
+
+<div id='rosterb' >
+
+
+</div>
+
+</div>
+
+<div class='hidden' >
+
+<form id='statEdit' action='http://knomatic.net/baseball/stats.php' method="POST" >
+
+<input name='action' id='statEdit_action' value='edit' />
+<input name='id' id='statSub_id' />
+<input name='data' id='statEdit_data' />
+
+</form>
+
+<form id='statNew' action='http://knomatic.net/baseball/stats.php' method="POST" >
+
+<input name='action' id='statNew_action' value='new' />
+<input name='id' id='statNew_id' />
+<input name='data' id='statEdit_data' />
+
+</form>
+
+</div>
+
+</body>
+
+</html>
